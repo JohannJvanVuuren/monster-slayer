@@ -13,9 +13,15 @@ const app = Vue.createApp({
     },
     computed: {
         monsterBarStyles() {
+            if (this.monsterHealth < 0) {
+                return { width: '0%'};
+            }
             return {width: (100 * (this.monsterHealth / 100)) + '%'};
         },
         playerBarStyles() {
+            if (this.playerHealth < 0) {
+                return { width: '0%'};
+            }
             return {width: (100 * (this.playerHealth / 100)) + '%'};
         },
         mayUseSpecialAttack() {
@@ -39,6 +45,12 @@ const app = Vue.createApp({
         },
     },
     methods: {
+        startGame() {
+            this.playerHealth = 100;
+            this.monsterHealth = 100;
+            this.winner = null;
+            this.currentRound = 0
+        },
         attackMonster() {
             this.currentRound++;
             //Formula to calculate random number between 5 and 12
@@ -65,7 +77,9 @@ const app = Vue.createApp({
                 this.playerHealth += healValue;
             }
             this.attackPlayer();
-
+        },
+        surrender() {
+            this.winner = 'monster';
         }
     }
 });
